@@ -1,0 +1,129 @@
+.weather-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  padding: 2rem;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  color: white;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.weather-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.weather-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.weather-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.weather-icon {
+  width: 6rem;
+  height: 6rem;
+}
+
+.weather-temp {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.weather-detail-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.25rem;
+}
+
+.detail-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.loading-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.loading-text {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+.error-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.error-message {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  color: white;
+  font-size: 1.25rem;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .weather-container {
+    padding: 1rem;
+  }
+  
+  .weather-card {
+    padding: 1.5rem;
+  }
+  
+  .weather-title {
+    font-size: 2rem;
+  }
+  
+  .weather-temp {
+    font-size: 3rem;
+  }
+} 
