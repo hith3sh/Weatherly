@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { WeatherCard } from '../components/WeatherCard';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { SearchBar } from '../components/SearchBar';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 interface WeatherData {
   current: {
@@ -68,12 +69,18 @@ export default function Home() {
     fetchWeatherData(searchCity);
   };
 
+  const handleThemeChange = (theme: 'light' | 'dark') => {
+    // You can add any additional theme-related logic here
+    console.log('Theme changed to:', theme);
+  };
+
   if (loading && !weatherData) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="weather-container">
+      <ThemeToggle onThemeChange={handleThemeChange} />
       <div className="search-section">
         <SearchBar onSearch={handleSearch} isLoading={loading} />
         {error && (
