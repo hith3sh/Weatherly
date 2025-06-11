@@ -38,14 +38,22 @@ export default function Home() {
       );
       const data = await response.json();
       
-      if (response.ok) {
-        setWeatherData(data);
-      } else {
-        throw new Error(data.error.message);
+      if (!response.ok) {
+        // Handle API error responses
+        if (data.error?.code === 1006) {
+          setError(`City "${cityName}" not found. Please try another city.`);
+        } else {
+          setError(data.error?.message || 'Failed to fetch weather data');
+        }
+        setWeatherData(null);
+        return;
       }
+
+      setWeatherData(data);
     } catch (error) {
-      setError('Failed to fetch weather data. Please try again later.');
       console.error('Error fetching weather data:', error);
+      setError('Failed to fetch weather data. Please try again later.');
+      setWeatherData(null);
     } finally {
       setLoading(false);
     }
@@ -66,15 +74,16 @@ export default function Home() {
 
   return (
     <div className="weather-container">
-      <SearchBar onSearch={handleSearch} isLoading={loading} />
+      <div className="search-section">
+        <SearchBar onSearch={handleSearch} isLoading={loading} />
+        {error && (
+          <div className="error-message-inline">
+            {error}
+          </div>
+        )}
+      </div>
       
-      {error ? (
-        <div className="error-container">
-          <div className="error-message">{error}</div>
-        </div>
-      ) : (
-        weatherData && <WeatherCard weatherData={weatherData} />
-      )}
+      {weatherData && <WeatherCard weatherData={weatherData} />}
     </div>
   );
 } 
