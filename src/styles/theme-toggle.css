@@ -76,6 +76,7 @@
   .themeToggle {
     top: 0.5rem;
     right: 0.5rem;
+    padding: 0.25rem;
   }
 
   .toggleTrack {
@@ -91,5 +92,39 @@
 
   .dark {
     transform: translateX(26px);
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 360px) {
+  .themeToggle {
+    top: 0.25rem;
+    right: 0.25rem;
+  }
+
+  .toggleTrack {
+    width: 45px;
+    height: 24px;
+  }
+
+  .toggleThumb {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+
+  .dark {
+    transform: translateX(23px);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .themeToggle:hover {
+    transform: none;
+  }
+
+  .themeToggle:active {
+    transform: scale(0.95);
   }
 } 

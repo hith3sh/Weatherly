@@ -33,6 +33,14 @@ export default function Home() {
   const fetchWeatherData = async (cityName: string) => {
     setLoading(true);
     setError(null);
+
+    // Check if the browser is online
+    if (!navigator.onLine) {
+      setError('You are currently offline. Please check your internet connection.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&aqi=no`
@@ -53,12 +61,42 @@ export default function Home() {
       setWeatherData(data);
     } catch (error) {
       console.error('Error fetching weather data:', error);
-      setError('Failed to fetch weather data. Please try again later.');
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          setError('Network error. Please check your internet connection and try again.');
+        } else {
+          setError('Failed to fetch weather data. Please try again later.');
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
       setWeatherData(null);
     } finally {
       setLoading(false);
     }
   };
+
+  // Add online/offline event listeners
+  useEffect(() => {
+    const handleOnline = () => {
+      if (error?.includes('offline') || error?.includes('Network error')) {
+        setError(null);
+        fetchWeatherData(city);
+      }
+    };
+
+    const handleOffline = () => {
+      setError('You are currently offline. Please check your internet connection.');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [city, error]);
 
   useEffect(() => {
     fetchWeatherData(city);
