@@ -31,6 +31,12 @@
   --border-color: var(--border-color-dark);
 }
 
+/* Initial theme state to prevent flash */
+html {
+  background: var(--bg-gradient);
+  color: var(--text-color);
+}
+
 .weather-container {
   min-height: 100vh;
   padding: 2rem;

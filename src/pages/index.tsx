@@ -28,7 +28,13 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState('Colombo');
+  const [city, setCity] = useState(() => {
+    // Get the last searched city from localStorage or default to Colombo
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('lastCity') || 'Colombo';
+    }
+    return 'Colombo';
+  });
 
   const fetchWeatherData = async (cityName: string) => {
     setLoading(true);
@@ -59,6 +65,8 @@ export default function Home() {
       }
 
       setWeatherData(data);
+      // Save the successful city to localStorage
+      localStorage.setItem('lastCity', cityName);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       if (error instanceof Error) {
