@@ -4,8 +4,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { WeatherCard } from '../components/WeatherCard';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { SearchBar } from '../components/SearchBar';
-import {Rain} from '../components/Rain';
+import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
+import { MoreInfoPanel } from '../components/MoreInfoPanel';
 
 const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
   const text = conditionText.toLowerCase();
@@ -48,14 +49,14 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [weatherType, setWeatherType] = useState<'rain' | 'snow' | null>(null);
-
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
 
   const fetchWeatherData = useCallback(async (cityName: string) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&aqi=no`
+        `https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&aqi=no`
       );
       const data = await response.json();
 
@@ -64,8 +65,10 @@ export default function Home() {
         const type = getWeatherType(data.current.condition.text);
         setWeatherType(type);
 
-        const localTimeHour = new Date(data.location.localtime).getHours();
-        const newTheme = (localTimeHour >= 6 && localTimeHour < 18) ? 'light' : 'dark';
+        
+        const is_day = data.current.is_day
+        const newTheme = (is_day==1) ? 'light' : 'dark';
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       } else {
@@ -114,8 +117,23 @@ export default function Home() {
           </div>
         )}
       </div>
-      
       {weatherData && <WeatherCard weatherData={weatherData} />}
+      <button className="more-info-btn" onClick={() => setShowMoreInfo(true)}>
+        More Info
+      </button>
+      
+      <MoreInfoPanel 
+        isOpen={showMoreInfo} 
+        onClose={() => setShowMoreInfo(false)} 
+        data={{
+          feelslike_c: weatherData?.current.feelslike_c,
+          precip_mm: weatherData?.current.precip_mm,
+          vis_km: weatherData?.current.vis_km,
+          pressure_mb: weatherData?.current.pressure_mb,
+          sunrise: weatherData?.forecast?.forecastday[0]?.astro?.sunrise,
+          sunset: weatherData?.forecast?.forecastday[0]?.astro?.sunset,
+        }}
+      />
     </div>
   );
 } 

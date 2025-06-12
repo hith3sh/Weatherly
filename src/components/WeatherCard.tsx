@@ -7,8 +7,10 @@ export const conditionToIcon: { [key: string]: string } = {
   "Sunny": "/icons/sunny-day.svg",
   "Clear": "/icons/clear-day.svg",
   "Partly Cloudy": "/icons/partly-cloudy-day.svg",
+  "Partly cloudy": "/icons/partly-cloudy-night.svg",
   "Cloudy": "/icons/cloudy-day-1.svg",
   "Fog": "/icons/fog.svg",
+  "Mist": "/icons/rainy-4.svg",
   "Overcast":"/icons/cloudy.svg",
   "Patchy rain possible": "/icons/rainy-4.svg",
   "Patchy snow possible": "/icons/snow.svg",
@@ -66,7 +68,10 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
           {weatherData.location.name}, {weatherData.location.country}
         </h1>
         <p className="weather-subtitle">
-          {new Date(weatherData.location.localtime).toLocaleTimeString()}
+          {new Date(weatherData.location.localtime).toLocaleString("en-US", { 
+          weekday: 'long', hour: '2-digit', minute: '2-digit'
+          })}
+
         </p>
       </div>
 
