@@ -6,9 +6,10 @@ import { TempIcon } from './icons/TemperatureIcon';
 export const conditionToIcon: { [key: string]: string } = {
   "Sunny": "/icons/sunny-day.svg",
   "Clear": "/icons/clear-day.svg",
-  "Partly cloudy": "/icons/partly-cloudy-day.svg",
+  "Partly Cloudy": "/icons/partly-cloudy-day.svg",
   "Cloudy": "/icons/cloudy-day-1.svg",
   "Fog": "/icons/fog.svg",
+  "Overcast":"/icons/cloudy.svg",
   "Patchy rain possible": "/icons/rainy-4.svg",
   "Patchy snow possible": "/icons/snow.svg",
   "Thundery outbreaks possible": "/icons/thunder.svg",

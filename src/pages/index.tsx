@@ -4,6 +4,18 @@ import { useEffect, useState, useCallback } from 'react';
 import { WeatherCard } from '../components/WeatherCard';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { SearchBar } from '../components/SearchBar';
+import {Rain} from '../components/Rain';
+import { Snow } from '../components/Snow';
+
+const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
+  const text = conditionText.toLowerCase();
+  if (text.includes('rain') || text.includes('drizzle') || text.includes('shower')) {
+    return 'rain';
+  } else if (text.includes('snow') || text.includes('blizzard') || text.includes('sleet')) {
+    return 'snow';
+  }
+  return null;
+};
 
 interface WeatherData {
   current: {
@@ -21,6 +33,7 @@ interface WeatherData {
     country: string;
     localtime: string;
   };
+  
 }
 
 export default function Home() {
@@ -34,14 +47,13 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [weatherType, setWeatherType] = useState<'rain' | 'snow' | null>(null);
+
 
   const fetchWeatherData = useCallback(async (cityName: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      // Add artificial delay for testing loading state if it's still there
-      await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay for testing
-
       const response = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&aqi=no`
       );
@@ -49,7 +61,8 @@ export default function Home() {
 
       if (response.ok) {
         setWeatherData(data);
-        console.log('Weather Condition Text:', data.current.condition.text);
+        const type = getWeatherType(data.current.condition.text);
+        setWeatherType(type);
 
         const localTimeHour = new Date(data.location.localtime).getHours();
         const newTheme = (localTimeHour >= 6 && localTimeHour < 18) ? 'light' : 'dark';
@@ -91,6 +104,8 @@ export default function Home() {
 
   return (
     <div className="weather-container">
+    {weatherType === 'rain' && <Rain />}
+    {weatherType === 'snow' && <Snow />}
       <div className="search-section">
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
         {error && (
