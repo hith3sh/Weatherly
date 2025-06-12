@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { WeatherCard } from '../components/WeatherCard';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { SearchBar } from '../components/SearchBar';
-import { ThemeToggle } from '../components/ThemeToggle';
+import { ClipLoader } from 'react-spinners';
 
 interface WeatherData {
   current: {
@@ -26,8 +26,8 @@ interface WeatherData {
 
 export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [city, setCity] = useState(() => {
     // Get the last searched city from localStorage or default to Colombo
     if (typeof window !== 'undefined') {
@@ -36,16 +36,10 @@ export default function Home() {
     return 'Colombo';
   });
 
-  const fetchWeatherData = async (cityName: string) => {
-    setLoading(true);
+  const fetchWeatherData = useCallback(async (cityName: string) => {
+    setIsLoading(true);
     setError(null);
 
-    // Check if the browser is online
-    if (!navigator.onLine) {
-      setError('You are currently offline. Please check your internet connection.');
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch(
@@ -67,6 +61,11 @@ export default function Home() {
       setWeatherData(data);
       // Save the successful city to localStorage
       localStorage.setItem('lastCity', cityName);
+
+      // Determine theme based on local time
+      const localTimeHour = new Date(data.location.localtime).getHours();
+      const isDaytime = localTimeHour >= 6 && localTimeHour < 18; //  6 AM to 6 PM is daytime
+      document.documentElement.setAttribute('data-theme', isDaytime ? 'light' : 'dark');
     } catch (error) {
       console.error('Error fetching weather data:', error);
       if (error instanceof Error) {
@@ -80,9 +79,9 @@ export default function Home() {
       }
       setWeatherData(null);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  };
+  }, []);
 
   // Add online/offline event listeners
   useEffect(() => {
@@ -104,31 +103,28 @@ export default function Home() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [city, error]);
+  }, [city, error, fetchWeatherData]);
 
   useEffect(() => {
     fetchWeatherData(city);
-  }, []);
+  }, [fetchWeatherData, city]);
 
-  const handleSearch = (searchCity: string) => {
-    setCity(searchCity);
-    fetchWeatherData(searchCity);
+  const handleSearch = (newCity: string) => {
+    setCity(newCity);
   };
 
-  const handleThemeChange = (theme: 'light' | 'dark') => {
-    // You can add any additional theme-related logic here
-    console.log('Theme changed to:', theme);
+  const clearError = () => {
+    setError(null);
   };
 
-  if (loading && !weatherData) {
+  if (isLoading && !weatherData) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="weather-container">
-      <ThemeToggle onThemeChange={handleThemeChange} />
       <div className="search-section">
-        <SearchBar onSearch={handleSearch} isLoading={loading} />
+        <SearchBar onSearch={handleSearch} isLoading={isLoading} />
         {error && (
           <div className="error-message-inline">
             {error}

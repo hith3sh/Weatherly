@@ -1,13 +1,15 @@
 /* Base styles */
 :root {
-  --bg-gradient-light: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  --bg-gradient-dark: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  --bg-gradient-light: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); /* Original blue gradient for light theme */
+  --bg-gradient-dark: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Original dark blue gradient for dark theme */
   --text-color-light: #1f2937;
   --text-color-dark: #ffffff;
   --card-bg-light: rgba(255, 255, 255, 0.9);
   --card-bg-dark: rgba(255, 255, 255, 0.1);
   --border-color-light: rgba(0, 0, 0, 0.1);
   --border-color-dark: rgba(255, 255, 255, 0.2);
+  --primary-color: #3b82f6;
+  --primary-color-hover: #2563eb;
 }
 
 /* Theme transitions */
@@ -95,22 +97,59 @@ html {
 
 .search-button {
   padding: 0.75rem 1.5rem;
-  background: #3b82f6;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-color-dark);
   border: none;
-  border-radius: 0.25rem;
-  font-weight: 500;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.search-button:hover {
-  background: #2563eb;
+.search-button:hover:not(:disabled) {
+  background: var(--primary-color-hover);
+  transform: translateY(-1px);
+}
+
+.search-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .search-button:disabled {
-  background: #93c5fd;
+  opacity: 0.7;
   cursor: not-allowed;
+  background: var(--primary-color);
+}
+
+.search-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.search-input-container.loading {
+  animation: pulse 1.5s infinite;
+}
+
+/* Loading state styles */
+.search-button .flex {
+  color: var(--text-color);
 }
 
 .weather-card {
@@ -122,15 +161,16 @@ html {
   max-width: 600px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
+  text-align: center;
 }
 
 .weather-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .weather-header h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: var(--text-color);
@@ -139,60 +179,72 @@ html {
 .weather-header p {
   color: var(--text-color);
   opacity: 0.8;
+  font-size: 1rem;
 }
 
 .weather-main {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 0.5rem;
   margin-bottom: 2rem;
 }
 
-.temperature {
-  font-size: 4rem;
+.weather-temp {
+  font-size: 6rem;
   font-weight: bold;
   color: var(--text-color);
 }
 
 .weather-icon {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
 }
 
 .weather-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
 }
 
-.detail-card {
-  background: var(--card-bg);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  border: 1px solid var(--border-color);
-}
-
-.detail-card h3 {
-  font-size: 0.875rem;
+.weather-detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: var(--text-color);
-  opacity: 0.8;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.weather-detail-item svg {
+  width: 24px;
+  height: 24px;
   margin-bottom: 0.5rem;
+  fill: var(--text-color);
 }
 
-.detail-card p {
-  font-size: 1.25rem;
+.weather-detail-item .value {
+  font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text-color);
+}
+
+.weather-detail-item .label {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .loading-container {
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  align-items: center;
+  background: var(--bg-gradient);
+  z-index: 1000;
 }
 
 .loading-content {
@@ -203,9 +255,11 @@ html {
 }
 
 .loading-text {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
 }
 
 .error-container {

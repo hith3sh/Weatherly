@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 interface SearchBarProps {
   onSearch: (city: string) => void;
@@ -15,6 +18,9 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
     }
   };
 
+  // Get current theme
+  const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+
   return (
     <form onSubmit={handleSubmit} className="search-bar">
       <div className="search-input-container">
@@ -26,12 +32,23 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
           className="search-input"
           disabled={isLoading}
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="search-button"
-          disabled={isLoading}
+          disabled={isLoading || !city.trim()}
         >
-          {isLoading ? 'Searching...' : 'Search'}
+          {isLoading ? (
+            <div className="flex items-center gap-2">
+              <ClipLoader 
+                size={16} 
+                color={isDarkTheme ? "#ffffff" : "#1f2937"} 
+                loading={isLoading}
+              />
+              <span>Loading...</span>
+            </div>
+          ) : (
+            'Search'
+          )}
         </button>
       </div>
     </form>
