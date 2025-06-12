@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { WeatherCard } from '../components/WeatherCard';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { SearchBar } from '../components/SearchBar';
-import { ClipLoader } from 'react-spinners';
 
 interface WeatherData {
   current: {
@@ -25,85 +24,53 @@ interface WeatherData {
 }
 
 export default function Home() {
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [city, setCity] = useState(() => {
-    // Get the last searched city from localStorage or default to Colombo
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('lastCity') || 'Colombo';
+      const savedCity = localStorage.getItem('lastCity');
+      return savedCity || 'Colombo';
     }
     return 'Colombo';
   });
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchWeatherData = useCallback(async (cityName: string) => {
     setIsLoading(true);
     setError(null);
-
-
     try {
+      // Add artificial delay for testing loading state if it's still there
+      await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay for testing
+
       const response = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&aqi=no`
       );
       const data = await response.json();
-      
-      if (!response.ok) {
-        // Handle API error responses
-        if (data.error?.code === 1006) {
-          setError(`City "${cityName}" not found. Please try another city.`);
+
+      if (response.ok) {
+        setWeatherData(data);
+        console.log('Weather Condition Text:', data.current.condition.text);
+
+        const localTimeHour = new Date(data.location.localtime).getHours();
+        const newTheme = (localTimeHour >= 6 && localTimeHour < 18) ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      } else {
+        if (data.error && data.error.code === 1006) {
+          setError('City not found. Please try another city.');
         } else {
-          setError(data.error?.message || 'Failed to fetch weather data');
+          setError(data.error?.message || 'Failed to fetch weather data.');
         }
         setWeatherData(null);
-        return;
       }
-
-      setWeatherData(data);
-      // Save the successful city to localStorage
-      localStorage.setItem('lastCity', cityName);
-
-      // Determine theme based on local time
-      const localTimeHour = new Date(data.location.localtime).getHours();
-      const isDaytime = localTimeHour >= 6 && localTimeHour < 18; //  6 AM to 6 PM is daytime
-      document.documentElement.setAttribute('data-theme', isDaytime ? 'light' : 'dark');
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      if (error instanceof Error) {
-        if (error.message.includes('Failed to fetch')) {
-          setError('Network error. Please check your internet connection and try again.');
-        } else {
-          setError('Failed to fetch weather data. Please try again later.');
-        }
-      } else {
-        setError('An unexpected error occurred. Please try again later.');
-      }
+    } catch (err) {
+      console.error('Error fetching weather data:', err);
+      setError('Failed to connect to the weather service!');
       setWeatherData(null);
     } finally {
       setIsLoading(false);
     }
   }, []);
-
-  // Add online/offline event listeners
-  useEffect(() => {
-    const handleOnline = () => {
-      if (error?.includes('offline') || error?.includes('Network error')) {
-        setError(null);
-        fetchWeatherData(city);
-      }
-    };
-
-    const handleOffline = () => {
-      setError('You are currently offline. Please check your internet connection.');
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, [city, error, fetchWeatherData]);
 
   useEffect(() => {
     fetchWeatherData(city);
@@ -111,6 +78,7 @@ export default function Home() {
 
   const handleSearch = (newCity: string) => {
     setCity(newCity);
+    localStorage.setItem('lastCity', newCity);
   };
 
   const clearError = () => {
@@ -136,3 +104,4 @@ export default function Home() {
     </div>
   );
 } 
+
