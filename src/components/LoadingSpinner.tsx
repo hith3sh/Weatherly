@@ -16,7 +16,7 @@ export const LoadingSpinner = () => {
     <div className="loading-container">
       <div className="loading-content">
         <ClipLoader
-          color={isDarkTheme ? "#ffffff" : "#1f2937"}
+          color={isDarkTheme ? '#ffffff' : '#1f2937'}
           loading={true}
           size={30}
           aria-label="Loading Spinner"
@@ -25,4 +25,4 @@ export const LoadingSpinner = () => {
       </div>
     </div>
   );
-}; 
+};

@@ -9,9 +9,17 @@ import { Snow } from '../components/Snow';
 
 const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
   const text = conditionText.toLowerCase();
-  if (text.includes('rain') || text.includes('drizzle') || text.includes('shower')) {
+  if (
+    text.includes('rain') ||
+    text.includes('drizzle') ||
+    text.includes('shower')
+  ) {
     return 'rain';
-  } else if (text.includes('snow') || text.includes('blizzard') || text.includes('sleet')) {
+  } else if (
+    text.includes('snow') ||
+    text.includes('blizzard') ||
+    text.includes('sleet')
+  ) {
     return 'snow';
   }
   return null;
@@ -33,7 +41,6 @@ interface WeatherData {
     country: string;
     localtime: string;
   };
-  
 }
 
 export default function Home() {
@@ -60,14 +67,13 @@ export default function Home() {
 
       if (response.ok) {
         setWeatherData(data);
-        
+
         //weather type
         const type = getWeatherType(data.current.condition.text);
         setWeatherType(type);
 
-        
-        const is_day = data.current.is_day
-        const newTheme = (is_day==1) ? 'light' : 'dark';
+        const is_day = data.current.is_day;
+        const newTheme = is_day == 1 ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       } else {
@@ -96,29 +102,19 @@ export default function Home() {
     localStorage.setItem('lastCity', newCity);
   };
 
-  const clearError = () => {
-    setError(null);
-  };
-
   if (isLoading && !weatherData) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="weather-container">
-    {weatherType === 'rain' && <Rain />}
-    {weatherType === 'snow' && <Snow />}
+      {weatherType === 'rain' && <Rain />}
+      {weatherType === 'snow' && <Snow />}
       <div className="search-section">
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-        {error && (
-          <div className="error-message-inline">
-            {error}
-          </div>
-        )}
+        {error && <div className="error-message-inline">{error}</div>}
       </div>
       {weatherData && <WeatherCard weatherData={weatherData} />}
-      
     </div>
   );
-} 
-
+}

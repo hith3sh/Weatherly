@@ -19,7 +19,8 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
   };
 
   // Get current theme
-  const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+  const isDarkTheme =
+    document.documentElement.getAttribute('data-theme') === 'dark';
 
   return (
     <form onSubmit={handleSubmit} className="search-bar">
@@ -27,7 +28,7 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
         <input
           type="text"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={e => setCity(e.target.value)}
           placeholder="Enter city name..."
           className="search-input"
           disabled={isLoading}
@@ -39,9 +40,9 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
-              <ClipLoader 
-                size={16} 
-                color={isDarkTheme ? "#ffffff" : "#1f2937"} 
+              <ClipLoader
+                size={16}
+                color={isDarkTheme ? '#ffffff' : '#1f2937'}
                 loading={isLoading}
               />
               <span>Loading...</span>
@@ -53,4 +54,4 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
       </div>
     </form>
   );
-}; 
+};

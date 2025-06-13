@@ -1,12 +1,12 @@
 .more-info-btn {
-    background-color: #3b82f6;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: none;
-    cursor: pointer;
-  }
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+}
 .more-info-btn-container {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -43,7 +43,7 @@
 .panel-header {
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color, #e5e7eb);

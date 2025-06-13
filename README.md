@@ -23,12 +23,14 @@ A modern, responsive weather application built with Next.js and TypeScript that 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/weather-app.git
 cd weather-app
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -36,11 +38,13 @@ yarn install
 ```
 
 3. Create a `.env.local` file in the root directory and add your WeatherAPI key:
+
 ```env
 NEXT_PUBLIC_WEATHER_API_KEY=your_api_key_here
 ```
 
 4. Run the development server:
+
 ```bash
 npm run dev
 # or
@@ -56,6 +60,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 1. Push your code to a GitHub repository.
 
 2. Import your project into Vercel:
+
    - Go to [Vercel](https://vercel.com)
    - Click "New Project"
    - Import your GitHub repository

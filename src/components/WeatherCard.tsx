@@ -2,59 +2,61 @@ import { HumidityIcon } from './icons/HumidityIcon';
 import { WindIcon } from './icons/WindIcon';
 import { UvIcon } from './icons/UvIcon';
 import { TempIcon } from './icons/TemperatureIcon';
+import Image from 'next/image';
+
 export const conditionToIcon: { [key: string]: string } = {
-  "Sunny": "/icons/sunny-day.svg",
-  "Clear": "/icons/clear-day.svg",
-  "Partly Cloudy": "/icons/partly-cloudy-day.svg",
-  "Partly cloudy": "/icons/partly-cloudy-night.svg",
-  "Cloudy": "/icons/cloudy-day-1.svg",
-  "Overcast": "/icons/cloudy.svg",
-  "Mist": "/icons/rainy-4.svg",
-  "Fog": "/icons/fog.svg",
-  "Freezing fog": "/icons/fog.svg",
-  "Patchy rain possible": "/icons/rainy-4.svg",
-  "Patchy snow possible": "/icons/snow.svg",
-  "Patchy sleet possible": "/icons/rain-and-sleet-mix.svg",
-  "Patchy freezing drizzle possible": "/icons/rainy-1.svg",
-  "Thundery outbreaks possible": "/icons/thunder.svg",
-  "Blowing snow": "/icons/snow.svg",
-  "Blizzard": "/icons/snowy-5.svg",
-  "Patchy light drizzle": "/icons/rainy-1.svg",
-  "Light drizzle": "/icons/rainy-1.svg",
-  "Freezing drizzle": "/icons/rainy-1.svg",
-  "Heavy freezing drizzle": "/icons/rainy-4.svg",
-  "Patchy light rain": "/icons/rainy-1.svg",
-  "Patchy rain nearby": "/icons/rainy-1.svg",
-  "Light rain": "/icons/rainy-2.svg",
-  "Moderate rain at times": "/icons/rainy-2.svg",
-  "Moderate rain": "/icons/rainy-2.svg",
-  "Heavy rain at times": "/icons/rainy-7.svg",
-  "Heavy rain": "/icons/rainy-7.svg",
-  "Light freezing rain": "/icons/rainy-1.svg",
-  "Moderate or heavy freezing rain": "/icons/rainy-4.svg",
-  "Light sleet": "/icons/rain-and-sleet-mix.svg",
-  "Moderate or heavy sleet": "/icons/rain-and-sleet-mix.svg",
-  "Patchy light snow": "/icons/snowy-1.svg",
-  "Light snow": "/icons/snowy-2.svg",
-  "Patchy moderate snow": "/icons/snowy-3.svg",
-  "Moderate snow": "/icons/snowy-4.svg",
-  "Patchy heavy snow": "/icons/snowy-5.svg",
-  "Heavy snow": "/icons/snowy-5.svg",
-  "Ice pellets": "/icons/snow.svg",
-  "Light rain shower": "/icons/rainy-1-day.svg",
-  "Moderate or heavy rain shower": "/icons/rainy-7.svg",
-  "Torrential rain shower": "/icons/rainy-7.svg",
-  "Light sleet showers": "/icons/rain-and-sleet-mix.svg",
-  "Moderate or heavy sleet showers": "/icons/rain-and-sleet-mix.svg",
-  "Light snow showers": "/icons/snowy-2.svg",
-  "Moderate or heavy snow showers": "/icons/snowy-4.svg",
-  "Light showers of ice pellets": "/icons/snow.svg",
-  "Moderate or heavy showers of ice pellets": "/icons/snowy-5.svg",
-  "Patchy light rain with thunder": "/icons/thunder.svg",
-  "Moderate or heavy rain with thunder": "/icons/thunder.svg",
-  "Thundery outbreaks in nearby":"/icons/thunder.svg",
-  "Patchy light snow with thunder": "/icons/thunder.svg",
-  "Moderate or heavy snow with thunder": "/icons/severe-thunderstorm.svg"
+  'Sunny': '/icons/sunny-day.svg',
+  'Clear': '/icons/clear-day.svg',
+  'Partly Cloudy': '/icons/partly-cloudy-day.svg',
+  'Partly cloudy': '/icons/partly-cloudy-night.svg',
+  'Cloudy': '/icons/cloudy-day-1.svg',
+  'Overcast': '/icons/cloudy.svg',
+  'Mist': '/icons/rainy-4.svg',
+  'Fog': '/icons/fog.svg',
+  'Freezing fog': '/icons/fog.svg',
+  'Patchy rain possible': '/icons/rainy-4.svg',
+  'Patchy snow possible': '/icons/snow.svg',
+  'Patchy sleet possible': '/icons/rain-and-sleet-mix.svg',
+  'Patchy freezing drizzle possible': '/icons/rainy-1.svg',
+  'Thundery outbreaks possible': '/icons/thunder.svg',
+  'Blowing snow': '/icons/snow.svg',
+  'Blizzard': '/icons/snowy-5.svg',
+  'Patchy light drizzle': '/icons/rainy-1.svg',
+  'Light drizzle': '/icons/rainy-1.svg',
+  'Freezing drizzle': '/icons/rainy-1.svg',
+  'Heavy freezing drizzle': '/icons/rainy-4.svg',
+  'Patchy light rain': '/icons/rainy-1.svg',
+  'Patchy rain nearby': '/icons/rainy-1.svg',
+  'Light rain': '/icons/rainy-2.svg',
+  'Moderate rain at times': '/icons/rainy-2.svg',
+  'Moderate rain': '/icons/rainy-2.svg',
+  'Heavy rain at times': '/icons/rainy-7.svg',
+  'Heavy rain': '/icons/rainy-7.svg',
+  'Light freezing rain': '/icons/rainy-1.svg',
+  'Moderate or heavy freezing rain': '/icons/rainy-4.svg',
+  'Light sleet': '/icons/rain-and-sleet-mix.svg',
+  'Moderate or heavy sleet': '/icons/rain-and-sleet-mix.svg',
+  'Patchy light snow': '/icons/snowy-1.svg',
+  'Light snow': '/icons/snowy-2.svg',
+  'Patchy moderate snow': '/icons/snowy-3.svg',
+  'Moderate snow': '/icons/snowy-4.svg',
+  'Patchy heavy snow': '/icons/snowy-5.svg',
+  'Heavy snow': '/icons/snowy-5.svg',
+  'Ice pellets': '/icons/snow.svg',
+  'Light rain shower': '/icons/rainy-1-day.svg',
+  'Moderate or heavy rain shower': '/icons/rainy-7.svg',
+  'Torrential rain shower': '/icons/rainy-7.svg',
+  'Light sleet showers': '/icons/rain-and-sleet-mix.svg',
+  'Moderate or heavy sleet showers': '/icons/rain-and-sleet-mix.svg',
+  'Light snow showers': '/icons/snowy-2.svg',
+  'Moderate or heavy snow showers': '/icons/snowy-4.svg',
+  'Light showers of ice pellets': '/icons/snow.svg',
+  'Moderate or heavy showers of ice pellets': '/icons/snowy-5.svg',
+  'Patchy light rain with thunder': '/icons/thunder.svg',
+  'Moderate or heavy rain with thunder': '/icons/thunder.svg',
+  'Thundery outbreaks in nearby': '/icons/thunder.svg',
+  'Patchy light snow with thunder': '/icons/thunder.svg',
+  'Moderate or heavy snow with thunder': '/icons/severe-thunderstorm.svg',
 };
 
 interface ForecastDay {
@@ -68,7 +70,6 @@ interface ForecastDay {
     };
   };
 }
-
 
 interface WeatherData {
   current: {
@@ -88,7 +89,7 @@ interface WeatherData {
   };
   forecast: {
     forecastday: ForecastDay[];
-  }
+  };
 }
 
 interface WeatherCardProps {
@@ -108,17 +109,21 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
           {weatherData.location.name}, {weatherData.location.country}
         </h1>
         <p className="weather-subtitle">
-          {new Date(weatherData.location.localtime).toLocaleString("en-US", { 
-          weekday: 'long', hour: '2-digit', minute: '2-digit'
+          {new Date(weatherData.location.localtime).toLocaleString('en-US', {
+            weekday: 'long',
+            hour: '2-digit',
+            minute: '2-digit',
           })}
-
         </p>
       </div>
 
       <div className="weather-main">
         <img
           // Try local SVG first, then fall back to API icon
-          src={conditionToIcon[weatherData.current.condition.text] || `https:${weatherData.current.condition.icon}`}
+          src={
+            conditionToIcon[weatherData.current.condition.text] ||
+            `https:${weatherData.current.condition.icon}`
+          }
           alt={weatherData.current.condition.text}
           className="weather-icon"
         />
@@ -133,7 +138,7 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
           <div className="value">{weatherData.current.humidity}%</div>
           <div className="label">Humidity</div>
         </div>
-        
+
         <div className="weather-detail-item">
           <WindIcon />
           <div className="value">{weatherData.current.wind_mph} mph</div>
@@ -157,25 +162,20 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
         <div className="forecast-grid">
           {weatherData.forecast.forecastday.map((day, index) => (
             <div key={index} className="forecast-day">
-              <div className="forecast-date">
-                {formatDate(day.date)}
-              </div>
-              <img 
-                src={day.day.condition.icon} 
+              <div className="forecast-date">{formatDate(day.date)}</div>
+              <img
+                src={day.day.condition.icon}
                 alt={day.day.condition.text}
                 className="forecast-icon"
               />
               <div className="forecast-temp">
                 {day.day.maxtemp_c}° / {day.day.mintemp_c}°
               </div>
-              <div className="forecast-condition">
-                {day.day.condition.text}
-              </div>
+              <div className="forecast-condition">{day.day.condition.text}</div>
             </div>
           ))}
         </div>
       </div>
-
     </div>
   );
-}; 
+};
