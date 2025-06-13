@@ -1,7 +1,7 @@
 /* Base styles */
 :root {
-  --bg-gradient-light: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); /* Original blue gradient for light theme */
-  --bg-gradient-dark: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Original dark blue gradient for dark theme */
+  --bg-gradient-light: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  --bg-gradient-dark: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   --text-color-light: #1f2937;
   --text-color-dark: #ffffff;
   --card-bg-light: rgba(255, 255, 255, 0.9);
@@ -10,6 +10,10 @@
   --border-color-dark: rgba(255, 255, 255, 0.2);
   --primary-color: #3b82f6;
   --primary-color-hover: #2563eb;
+  --current-condition-color-light: #3b82f6;
+  --current-condition-color-dark: #ffffff;
+  --current-condition-bg-light: rgb(255, 255, 255, 0.9);
+  --current-condition-bg-dark: rgba(59, 130, 246, 0.18);
 }
 
 /* Theme transitions */
@@ -23,6 +27,8 @@
   --text-color: var(--text-color-light);
   --card-bg: var(--card-bg-light);
   --border-color: var(--border-color-light);
+  --current-condition-color: var(--current-condition-color-light);
+  --current-condition-bg: var(--current-condition-bg-light);
 }
 
 /* Dark theme */
@@ -31,6 +37,8 @@
   --text-color: var(--text-color-dark);
   --card-bg: var(--card-bg-dark);
   --border-color: var(--border-color-dark);
+  --current-condition-color: var(--current-condition-color-dark);
+  --current-condition-bg: var(--current-condition-bg-dark);
 }
 
 /* Initial theme state to prevent flash */
@@ -158,6 +166,17 @@ html {
   border-top: 1px solid var(--border-color);
 }
 
+.weather-current-condition {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--current-condition-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
 .weather-card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
@@ -177,7 +196,7 @@ html {
 
 .weather-header h1 {
   font-size: 2.5rem;
-  font-size: clamp(1rem, 6vw, 2.5rem);
+  font-size: clamp(1.2rem, 6vw, 2.5rem);
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: var(--text-color);
