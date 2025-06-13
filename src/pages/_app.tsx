@@ -3,6 +3,8 @@ import type { AppProps } from "next/app";
 import Head from 'next/head';
 import '../styles/weather.css';
 import '../styles/moreinfo.css';
+import '../styles/rain.css';
+import '../styles/snow.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

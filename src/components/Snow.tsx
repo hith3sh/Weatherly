@@ -1,9 +1,7 @@
-import styles from '../styles/snow.module.css';
-
 export const Snow = () => {
-  return <div className={styles.snowContainer}>
+  return <div className="snowContainer">
     {[...Array(50)].map((_, i) => (
-      <div key={i} className={styles.snowflake}>❄️</div>
+      <div key={i} className="snowflake">❄️</div>
     ))}
   </div>;
 };
