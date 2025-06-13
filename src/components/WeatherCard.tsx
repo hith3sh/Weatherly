@@ -2,63 +2,9 @@ import { HumidityIcon } from './icons/HumidityIcon';
 import { WindIcon } from './icons/WindIcon';
 import { UvIcon } from './icons/UvIcon';
 import { TempIcon } from './icons/TemperatureIcon';
-import Image from 'next/image';
+import { conditionToIcon } from '../utils/weatherIcons';
 
-export const conditionToIcon: { [key: string]: string } = {
-  'Sunny': '/icons/sunny-day.svg',
-  'Clear': '/icons/clear-day.svg',
-  'Partly Cloudy': '/icons/partly-cloudy-day.svg',
-  'Partly cloudy': '/icons/partly-cloudy-night.svg',
-  'Cloudy': '/icons/cloudy-day-1.svg',
-  'Overcast': '/icons/cloudy.svg',
-  'Mist': '/icons/rainy-4.svg',
-  'Fog': '/icons/fog.svg',
-  'Freezing fog': '/icons/fog.svg',
-  'Patchy rain possible': '/icons/rainy-4.svg',
-  'Patchy snow possible': '/icons/snow.svg',
-  'Patchy sleet possible': '/icons/rain-and-sleet-mix.svg',
-  'Patchy freezing drizzle possible': '/icons/rainy-1.svg',
-  'Thundery outbreaks possible': '/icons/thunder.svg',
-  'Blowing snow': '/icons/snow.svg',
-  'Blizzard': '/icons/snowy-5.svg',
-  'Patchy light drizzle': '/icons/rainy-1.svg',
-  'Light drizzle': '/icons/rainy-1.svg',
-  'Freezing drizzle': '/icons/rainy-1.svg',
-  'Heavy freezing drizzle': '/icons/rainy-4.svg',
-  'Patchy light rain': '/icons/rainy-1.svg',
-  'Patchy rain nearby': '/icons/rainy-1.svg',
-  'Light rain': '/icons/rainy-2.svg',
-  'Moderate rain at times': '/icons/rainy-2.svg',
-  'Moderate rain': '/icons/rainy-2.svg',
-  'Heavy rain at times': '/icons/rainy-7.svg',
-  'Heavy rain': '/icons/rainy-7.svg',
-  'Light freezing rain': '/icons/rainy-1.svg',
-  'Moderate or heavy freezing rain': '/icons/rainy-4.svg',
-  'Light sleet': '/icons/rain-and-sleet-mix.svg',
-  'Moderate or heavy sleet': '/icons/rain-and-sleet-mix.svg',
-  'Patchy light snow': '/icons/snowy-1.svg',
-  'Light snow': '/icons/snowy-2.svg',
-  'Patchy moderate snow': '/icons/snowy-3.svg',
-  'Moderate snow': '/icons/snowy-4.svg',
-  'Patchy heavy snow': '/icons/snowy-5.svg',
-  'Heavy snow': '/icons/snowy-5.svg',
-  'Ice pellets': '/icons/snow.svg',
-  'Light rain shower': '/icons/rainy-1-day.svg',
-  'Moderate or heavy rain shower': '/icons/rainy-7.svg',
-  'Torrential rain shower': '/icons/rainy-7.svg',
-  'Light sleet showers': '/icons/rain-and-sleet-mix.svg',
-  'Moderate or heavy sleet showers': '/icons/rain-and-sleet-mix.svg',
-  'Light snow showers': '/icons/snowy-2.svg',
-  'Moderate or heavy snow showers': '/icons/snowy-4.svg',
-  'Light showers of ice pellets': '/icons/snow.svg',
-  'Moderate or heavy showers of ice pellets': '/icons/snowy-5.svg',
-  'Patchy light rain with thunder': '/icons/thunder.svg',
-  'Moderate or heavy rain with thunder': '/icons/thunder.svg',
-  'Thundery outbreaks in nearby': '/icons/thunder.svg',
-  'Patchy light snow with thunder': '/icons/thunder.svg',
-  'Moderate or heavy snow with thunder': '/icons/severe-thunderstorm.svg',
-};
-
+// Interface for forecast data structure
 interface ForecastDay {
   date: string;
   day: {
@@ -71,6 +17,7 @@ interface ForecastDay {
   };
 }
 
+// Main weather data interface matching the API response structure
 interface WeatherData {
   current: {
     temp_c: number;
@@ -97,6 +44,7 @@ interface WeatherCardProps {
 }
 
 export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
+  // Helper function to format date into short weekday format (e.g., "Mon", "Tue")
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -104,6 +52,7 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
 
   return (
     <div className="weather-card">
+      {/* Location and time header section */}
       <div className="weather-header">
         <h1 className="weather-title">
           {weatherData.location.name}, {weatherData.location.country}
@@ -117,9 +66,10 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
         </p>
       </div>
 
+      {/* Main weather condition display with icon */}
       <div className="weather-main">
         <img
-          // Try local SVG first, then fall back to API icon
+          // Fallback mechanism: Try local SVG first, then use API icon if not found
           src={
             conditionToIcon[weatherData.current.condition.text] ||
             `https:${weatherData.current.condition.icon}`
@@ -132,6 +82,7 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
         </div>
       </div>
 
+      {/* Weather metrics grid (humidity, wind, UV, temperature) */}
       <div className="weather-details">
         <div className="weather-detail-item">
           <HumidityIcon />
@@ -158,6 +109,7 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
         </div>
       </div>
 
+      {/* 4-day forecast section */}
       <div className="forecast-section">
         <div className="forecast-grid">
           {weatherData.forecast.forecastday.map((day, index) => (

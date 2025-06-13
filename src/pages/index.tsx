@@ -7,6 +7,7 @@ import { SearchBar } from '../components/SearchBar';
 import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
 
+// Helper function to determine weather type for animation effects
 const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
   const text = conditionText.toLowerCase();
   if (
@@ -25,11 +26,12 @@ const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
   return null;
 };
 
+// Type definition matching the WeatherAPI.com response structure
 interface WeatherData {
   current: {
     temp_c: number;
     humidity: number;
-    wind_kph: number;
+    wind_mph: number;
     uv: number;
     condition: {
       text: string;
@@ -41,9 +43,23 @@ interface WeatherData {
     country: string;
     localtime: string;
   };
+  forecast: {
+    forecastday: Array<{
+      date: string;
+      day: {
+        maxtemp_c: number;
+        mintemp_c: number;
+        condition: {
+          text: string;
+          icon: string;
+        };
+      };
+    }>;
+  };
 }
 
 export default function Home() {
+  // Initialize city from localStorage or default to 'Colombo'
   const [city, setCity] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedCity = localStorage.getItem('lastCity');
@@ -56,6 +72,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [weatherType, setWeatherType] = useState<'rain' | 'snow' | null>(null);
 
+  // Fetch weather data from API and handle theme switching
   const fetchWeatherData = useCallback(async (cityName: string) => {
     setIsLoading(true);
     setError(null);
@@ -68,15 +85,17 @@ export default function Home() {
       if (response.ok) {
         setWeatherData(data);
 
-        //weather type
+        // Set weather type for animation effects
         const type = getWeatherType(data.current.condition.text);
         setWeatherType(type);
 
+        // Switch theme based on day/night
         const is_day = data.current.is_day;
         const newTheme = is_day == 1 ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       } else {
+        // Handle specific API error cases
         if (data.error && data.error.code === 1006) {
           setError('😥 City not found. Try another city!');
         } else {
@@ -93,27 +112,35 @@ export default function Home() {
     }
   }, []);
 
+  // Fetch weather data when city changes
   useEffect(() => {
     fetchWeatherData(city);
   }, [fetchWeatherData, city]);
 
+  // Handle city search and persist to localStorage
   const handleSearch = (newCity: string) => {
     setCity(newCity);
     localStorage.setItem('lastCity', newCity);
   };
 
+  // Show loading spinner while fetching initial data
   if (isLoading && !weatherData) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="weather-container">
+      {/* Weather animation effects */}
       {weatherType === 'rain' && <Rain />}
       {weatherType === 'snow' && <Snow />}
+      
+      {/* Search section with error handling */}
       <div className="search-section">
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
         {error && <div className="error-message-inline">{error}</div>}
       </div>
+
+      {/* Main weather card display */}
       {weatherData && <WeatherCard weatherData={weatherData} />}
     </div>
   );
