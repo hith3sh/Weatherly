@@ -68,7 +68,6 @@ export default function Home() {
         
         const is_day = data.current.is_day
         const newTheme = (is_day==1) ? 'light' : 'dark';
-
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       } else {

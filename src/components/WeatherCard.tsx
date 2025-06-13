@@ -55,7 +55,7 @@ interface WeatherData {
   current: {
     temp_c: number;
     humidity: number;
-    wind_kph: number;
+    wind_mph: number;
     uv: number;
     condition: {
       text: string;
@@ -117,7 +117,7 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
         
         <div className="weather-detail-item">
           <WindIcon />
-          <div className="value">{weatherData.current.wind_kph} km/h</div>
+          <div className="value">{weatherData.current.wind_mph} km/h</div>
           <div className="label">Wind Speed</div>
         </div>
 
