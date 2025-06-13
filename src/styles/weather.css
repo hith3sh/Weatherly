@@ -70,7 +70,6 @@ html {
   display: flex;
   gap: 0.5rem;
   background: var(--card-bg);
-  padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid var(--border-color);
 }
@@ -82,7 +81,7 @@ html {
   border-radius: 0.25rem;
   background: transparent;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .search-input::placeholder {
@@ -96,13 +95,14 @@ html {
 }
 
 .search-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.1rem 1.5rem;
   background: var(--primary-color);
   color: var(--text-color-dark);
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
   cursor: pointer;
   font-weight: 500;
+  font-size: 1rem;
   transition: all 0.3s ease;
   min-width: 100px;
   display: flex;
@@ -152,11 +152,62 @@ html {
   color: var(--text-color);
 }
 
+/* forecast section */
+.forecast-section {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.forecast-day {
+  background: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.forecast-day:hover {
+  transform: translateY(-2px);
+}
+
+.forecast-date {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-temp {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0.5rem 0;
+}
+
+.forecast-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0.5rem auto;
+}
+
+.forecast-condition {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
 .weather-card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
   max-width: 600px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -310,10 +361,10 @@ html {
   backdrop-filter: blur(10px);
   padding: 1rem;
   border-radius: 0.5rem;
-  color: #d30000;
+  color: #ffffff;
   text-align: center;
   font-size: 0.9rem;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid #ef44444d;
   animation: fadeIn 0.3s ease-in-out;
 }
 

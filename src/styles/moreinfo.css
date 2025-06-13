@@ -1,8 +1,4 @@
 .more-info-btn {
-    position: fixed;
-    bottom: 1rem;
-    left: 10%;
-    transform: translateX(-50%);
     background-color: #3b82f6;
     color: white;
     padding: 0.5rem 1rem;
@@ -11,6 +7,11 @@
     border: none;
     cursor: pointer;
   }
+.more-info-btn-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  margin-top: 0.5rem; /* Space between weather-container and button */
+}
 
 .more-info-panel {
   position: fixed;
@@ -41,11 +42,21 @@
 
 .panel-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  align-items: center; 
+  margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.drag-handle {
+  width: 40px; /* Width of the drag handle */
+  height: 4px; /* Height of the drag handle */
+  background-color: #ccc; /* Color of the drag handle */
+  border-radius: 2px; /* Rounded edges */
+  margin: 0 auto; /* Center the handle */
+  cursor: grab; /* Change cursor to indicate draggable */
+  margin-bottom: 0.5rem; /* Space between handle and title */
 }
 
 .panel-header h3 {

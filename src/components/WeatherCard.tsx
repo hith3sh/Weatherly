@@ -38,6 +38,19 @@ export const conditionToIcon: { [key: string]: string } = {
   "Moderate or heavy snow with thunder": "/icons/severe-thunderstorm.svg",
 };
 
+interface ForecastDay {
+  date: string;
+  day: {
+    maxtemp_c: number;
+    mintemp_c: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+  };
+}
+
+
 interface WeatherData {
   current: {
     temp_c: number;
@@ -54,6 +67,9 @@ interface WeatherData {
     country: string;
     localtime: string;
   };
+  forecast: {
+    forecastday: ForecastDay[];
+  }
 }
 
 interface WeatherCardProps {
@@ -61,6 +77,11 @@ interface WeatherCardProps {
 }
 
 export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
+  };
+
   return (
     <div className="weather-card">
       <div className="weather-header">
@@ -112,6 +133,30 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
           <div className="label">Temperature</div>
         </div>
       </div>
+
+      <div className="forecast-section">
+        <div className="forecast-grid">
+          {weatherData.forecast.forecastday.map((day, index) => (
+            <div key={index} className="forecast-day">
+              <div className="forecast-date">
+                {formatDate(day.date)}
+              </div>
+              <img 
+                src={day.day.condition.icon} 
+                alt={day.day.condition.text}
+                className="forecast-icon"
+              />
+              <div className="forecast-temp">
+                {day.day.maxtemp_c}° / {day.day.mintemp_c}°
+              </div>
+              <div className="forecast-condition">
+                {day.day.condition.text}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 }; 
