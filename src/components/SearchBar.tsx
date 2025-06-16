@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
+import { FiSearch } from 'react-icons/fi';
 
 interface SearchBarProps {
   onSearch: (city: string) => void;
@@ -39,16 +40,13 @@ export const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
           disabled={isLoading || !city.trim()}
         >
           {isLoading ? (
-            <div className="flex items-center gap-2">
-              <ClipLoader
-                size={16}
-                color={isDarkTheme ? '#ffffff' : '#1f2937'}
-                loading={isLoading}
-              />
-              <span>Loading...</span>
-            </div>
+            <ClipLoader
+              size={20}
+              color={isDarkTheme ? '#ffffff' : '#1f2937'}
+              loading={isLoading}
+            />
           ) : (
-            'Search'
+            <FiSearch size={20} />
           )}
         </button>
       </div>
