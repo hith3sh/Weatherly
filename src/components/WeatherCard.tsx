@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { HumidityIcon } from './icons/HumidityIcon';
 import { WindIcon } from './icons/WindIcon';
 import { UvIcon } from './icons/UvIcon';
@@ -68,14 +69,17 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
 
       {/* Main weather condition display with icon */}
       <div className="weather-main">
-        <img
+        <Image
           // Fallback mechanism: Try local SVG first, then use API icon if not found
           src={
             conditionToIcon[weatherData.current.condition.text] ||
             `https:${weatherData.current.condition.icon}`
           }
           alt={weatherData.current.condition.text}
+          width={200}
+          height={200}
           className="weather-icon"
+          priority
         />
         <div className="weather-current-condition">
           {weatherData.current.condition.text}
@@ -115,9 +119,11 @@ export const WeatherCard = ({ weatherData }: WeatherCardProps) => {
           {weatherData.forecast.forecastday.map((day, index) => (
             <div key={index} className="forecast-day">
               <div className="forecast-date">{formatDate(day.date)}</div>
-              <img
-                src={day.day.condition.icon}
+              <Image
+                src={`https:${day.day.condition.icon}`}
                 alt={day.day.condition.text}
+                width={50}
+                height={50}
                 className="forecast-icon"
               />
               <div className="forecast-temp">
