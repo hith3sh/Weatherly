@@ -1,11 +1,16 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { WeatherCard } from '../components/WeatherCard';
+import { PageWrapper } from '../components/layout/PageWrapper';
+import { Header } from '../components/layout/Header';
+import { MainWeatherCard } from '../components/dashboard/MainWeatherCard';
+import { TodaysHighlight } from '../components/dashboard/TodaysHighlight';
+import { SevenDayForecast } from '../components/dashboard/SevenDayForecast';
+import { WeatherMap } from '../components/dashboard/WeatherMap';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { SearchBar } from '../components/SearchBar';
 import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
+import { fetchWeatherData, WeatherData } from '../lib/weatherApi';
 
 // Helper function to determine weather type for animation effects
 const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
@@ -26,40 +31,8 @@ const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
   return null;
 };
 
-// Type definition matching the WeatherAPI.com response structure
-interface WeatherData {
-  current: {
-    temp_c: number;
-    humidity: number;
-    wind_mph: number;
-    uv: number;
-    condition: {
-      text: string;
-      icon: string;
-    };
-  };
-  location: {
-    name: string;
-    country: string;
-    localtime: string;
-  };
-  forecast: {
-    forecastday: Array<{
-      date: string;
-      day: {
-        maxtemp_c: number;
-        mintemp_c: number;
-        condition: {
-          text: string;
-          icon: string;
-        };
-      };
-    }>;
-  };
-}
-
 export default function Home() {
-  // Initialize city from localStorage or default to 'Colombo'
+  // Initialize state from localStorage or defaults
   const [city, setCity] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedCity = localStorage.getItem('lastCity');
@@ -67,45 +40,46 @@ export default function Home() {
     }
     return 'Colombo';
   });
+  
+  const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>(() => {
+    if (typeof window !== 'undefined') {
+      const savedUnit = localStorage.getItem('temperatureUnit') as 'C' | 'F';
+      return savedUnit || 'C';
+    }
+    return 'C';
+  });
+  
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+      return savedTheme || 'light';
+    }
+    return 'light';
+  });
+
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [weatherType, setWeatherType] = useState<'rain' | 'snow' | null>(null);
 
-  // Fetch weather data from API and handle theme switching
-  const fetchWeatherData = useCallback(async (cityName: string) => {
+  // Apply theme to document
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    }
+  }, [theme]);
+
+  // Fetch weather data from API
+  const fetchWeather = useCallback(async (cityName: string) => {
     setIsLoading(true);
-    setError(null);
     try {
-      const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${cityName}&days=4&aqi=no`
-      );
-      const data = await response.json();
+      const data = await fetchWeatherData(cityName);
+      setWeatherData(data);
 
-      if (response.ok) {
-        setWeatherData(data);
-
-        // Set weather type for animation effects
-        const type = getWeatherType(data.current.condition.text);
-        setWeatherType(type);
-
-        // Switch theme based on day/night
-        const is_day = data.current.is_day;
-        const newTheme = is_day == 1 ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-      } else {
-        // Handle specific API error cases
-        if (data.error && data.error.code === 1006) {
-          setError('😥 City not found. Try another city!');
-        } else {
-          setError(data.error?.message || 'Failed to fetch weather data.');
-        }
-        setWeatherData(null);
-      }
+      // Set weather type for animation effects
+      const type = getWeatherType(data.current.condition.text);
+      setWeatherType(type);
     } catch (err) {
       console.error('Error fetching weather data:', err);
-      setError('Failed to connect to the weather service!');
       setWeatherData(null);
     } finally {
       setIsLoading(false);
@@ -114,13 +88,25 @@ export default function Home() {
 
   // Fetch weather data when city changes
   useEffect(() => {
-    fetchWeatherData(city);
-  }, [fetchWeatherData, city]);
+    fetchWeather(city);
+  }, [fetchWeather, city]);
 
   // Handle city search and persist to localStorage
   const handleSearch = (newCity: string) => {
     setCity(newCity);
     localStorage.setItem('lastCity', newCity);
+  };
+
+  // Handle temperature unit change
+  const handleTemperatureUnitChange = (unit: 'C' | 'F') => {
+    setTemperatureUnit(unit);
+    localStorage.setItem('temperatureUnit', unit);
+  };
+
+  // Handle theme change
+  const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
   };
 
   // Show loading spinner while fetching initial data
@@ -129,19 +115,52 @@ export default function Home() {
   }
 
   return (
-    <div className="weather-container">
+    <PageWrapper>
       {/* Weather animation effects */}
       {weatherType === 'rain' && <Rain />}
       {weatherType === 'snow' && <Snow />}
       
-      {/* Search section with error handling */}
-      <div className="search-section">
-        <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-        {error && <div className="error-message-inline">{error}</div>}
-      </div>
+      {/* Header with controls */}
+      <Header
+        onSearch={handleSearch}
+        isLoading={isLoading}
+        onTemperatureUnitChange={handleTemperatureUnitChange}
+        temperatureUnit={temperatureUnit}
+        onThemeChange={handleThemeChange}
+        currentTheme={theme}
+      />
 
-      {/* Main weather card display */}
-      {weatherData && <WeatherCard weatherData={weatherData} />}
-    </div>
+      {/* Main dashboard layout */}
+      {weatherData && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left column - Main weather card and 7-day forecast */}
+          <div className="lg:col-span-1 space-y-6">
+            <MainWeatherCard
+              currentWeather={weatherData.current}
+              location={weatherData.location}
+              temperatureUnit={temperatureUnit}
+            />
+            
+            {/* 7-Day Forecast below main weather card */}
+            <SevenDayForecast 
+              forecast={weatherData.forecast.forecastday} 
+              temperatureUnit={temperatureUnit}
+            />
+          </div>
+
+          {/* Right column - Today's Highlights and Weather Map */}
+          <div className="lg:col-span-2 space-y-6">
+            <TodaysHighlight
+              currentWeather={weatherData.current}
+              astro={weatherData.forecast.forecastday[0]?.astro}
+              temperatureUnit={temperatureUnit}
+            />
+            
+            {/* Weather Map below Today's Highlights */}
+            <WeatherMap location={weatherData.location} />
+          </div>
+        </div>
+      )}
+    </PageWrapper>
   );
 }
