@@ -1,16 +1,23 @@
-# Weather App
+# Weatherly: A Modern Weather Application
 
-A modern, responsive weather application built with Next.js and TypeScript that provides real-time weather information and forecasts. Features a clean, intuitive interface with support for both light and dark themes.
+A sleek, responsive weather application built with Next.js and TypeScript. It provides real-time weather information, detailed forecasts, and a beautiful, intuitive interface with light and dark themes.
 
 ## Features
 
-- 🌤️ Real-time weather data
-- 📱 Fully responsive design
-- 🌓 Light/Dark theme support
-- 🔍 City search functionality
-- 📊 4-day weather forecast
-- 🎨 Beautiful UI with weather animations
-- 🌍 Location-based weather updates
+- 🌤️ **Real-time Weather Data:** Get up-to-the-minute weather information for any city.
+- 📊 **7-Day Forecast:** Plan ahead with a detailed 7-day weather forecast.
+- 📍 **City Search:** Find weather information for any location and have your last search saved for convenience.
+- **Today's Highlights:** A comprehensive overview of the day's weather, including:
+  - **UV Index:** With a helpful gauge to show the intensity.
+  - **Wind Status:** Current wind speed and direction.
+  - **Sunrise & Sunset:** Times for the local area.
+  - **Humidity:** Percentage of humidity.
+  - **Visibility:** Air visibility in miles/kilometers.
+  - **Feels Like:** The perceived temperature.
+- 🗺️ **Interactive Map:** Visualize the weather with an interactive map of the selected location.
+- 🌓 **Light/Dark Theme:** Switch between light and dark modes for comfortable viewing.
+- 📱 **Fully Responsive Design:** A seamless experience across all devices.
+- 🎨 **Weather Animations:** Subtle rain and snow animations for an immersive experience.
 
 ## Getting Started
 
@@ -25,8 +32,8 @@ A modern, responsive weather application built with Next.js and TypeScript that 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/weather-app.git
-cd weather-app
+git clone https://github.com/hith3sh/Weatherly.git
+cd Weatherly
 ```
 
 2. Install dependencies:
@@ -83,6 +90,7 @@ NEXT_PUBLIC_WEATHER_API_KEY=your_api_key_here
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [WeatherAPI.com](https://www.weatherapi.com/) - Weather data
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Leaflet](https://leafletjs.com/) - Interactive maps
 
 ## Contributing
 
@@ -99,4 +107,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - Weather data provided by [WeatherAPI.com](https://www.weatherapi.com/)
-- Icons from [Weather Icons](https://github.com/erikflowers/weather-icons)
+- Icons used are from various sources, bundled with the project.
