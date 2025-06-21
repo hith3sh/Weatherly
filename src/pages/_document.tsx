@@ -22,7 +22,7 @@ export default function Document() {
                 }
 
                 const theme = getInitialTheme();
-                document.documentElement.setAttribute('data-theme', theme);
+                // document.documentElement.setAttribute('data-theme', theme);
                 document.documentElement.style.visibility = 'visible';
               })();
             `,

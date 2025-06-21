@@ -30,7 +30,7 @@
       border-color 0.3s ease;
   }
   
-  [data-theme='light'] {
+  /* [data-theme='light'] {
     --bg-gradient: var(--bg-gradient-light-animated);
     --text-color: var(--text-color-light);
     --card-bg: var(--card-bg-light);
@@ -46,7 +46,7 @@
     --border-color: var(--border-color-dark);
     --current-condition-color: var(--current-condition-color-dark);
     --current-condition-bg: var(--current-condition-bg-dark);
-  }
+  } */
   
   /* Initial theme state to prevent flash */
   html {

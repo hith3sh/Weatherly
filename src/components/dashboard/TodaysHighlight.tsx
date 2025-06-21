@@ -25,12 +25,16 @@ interface TodaysHighlightProps {
     sunset: string;
   };
   temperatureUnit: 'C' | 'F';
+  location: {
+    localtime: string;
+  };
 }
 
 export const TodaysHighlight: React.FC<TodaysHighlightProps> = ({
   currentWeather,
   astro,
   temperatureUnit,
+  location,
 }) => {
   return (
     <Card>
@@ -41,7 +45,11 @@ export const TodaysHighlight: React.FC<TodaysHighlightProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <WindStatus windSpeed={currentWeather.wind_mph} />
         <UvIndex uvIndex={currentWeather.uv} />
-        <SunriseSunset sunrise={astro?.sunrise} sunset={astro?.sunset} />
+        <SunriseSunset
+          sunrise={astro?.sunrise}
+          sunset={astro?.sunset}
+          localtime={location.localtime}
+        />
         <Humidity humidity={currentWeather.humidity} />
         <Visibility visibility={currentWeather.vis_km} />
         <FeelsLike 

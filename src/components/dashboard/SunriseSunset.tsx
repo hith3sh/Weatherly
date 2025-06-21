@@ -3,53 +3,109 @@ import React from 'react';
 interface SunriseSunsetProps {
   sunrise?: string;
   sunset?: string;
+  localtime?: string;
 }
 
-export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset }) => {
-  const formatTime = (timeString?: string) => {
-    if (!timeString) return '--:--';
-    return timeString;
-  };
+function parseTime(time?: string): number | null {
+  if (!time) return null;
+  // To handle both 'AM/PM' and 'HH:mm' formats
+  const match = time.match(/(\d{1,2}):(\d{2}) ?([AP]M)?/i);
+  if (!match) return null;
+  let hour = parseInt(match[1], 10);
+  const minute = parseInt(match[2], 10);
+  const ampm = match[3]?.toUpperCase();
+  if (ampm === 'PM' && hour < 12) hour += 12;
+  if (ampm === 'AM' && hour === 12) hour = 0;
+  return hour * 60 + minute;
+}
+
+function getMinutesFromLocaltime(localtime?: string): number | null {
+  if (!localtime) return null;
+  // Expects 'YYYY-MM-DD HH:mm'
+  const timePart = localtime.split(' ')[1];
+  if (!timePart) return null;
+  return parseTime(timePart);
+}
+
+export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, localtime }) => {
+  // Parse times to minutes since midnight
+  const sunriseMins = parseTime(sunrise);
+  const sunsetMins = parseTime(sunset);
+  const nowMins = getMinutesFromLocaltime(localtime);
+
+  // Calculate sun position (0=start, 1=end)
+  let sunPos = 0;
+  if (sunriseMins !== null && sunsetMins !== null && nowMins !== null && sunsetMins > sunriseMins) {
+    sunPos = Math.min(1, Math.max(0, (nowMins - sunriseMins) / (sunsetMins - sunriseMins)));
+  }
+
+  // Arc dimensions
+  const R = 48; // radius
+  const C = Math.PI * R; // half circumference
+  const arcY = 60;
+  const arcX = 60;
+  // Sun position along arc
+  const angle = Math.PI * sunPos;
+  const sunX = arcX + R * Math.cos(Math.PI - angle);
+  const sunY = arcY - R * Math.sin(angle);
 
   return (
     <div className="bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 rounded-xl p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
-          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Sunrise & Sunset</span>
-        </div>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Sunrise</span>
+        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Sunset</span>
       </div>
-
-      <div className="space-y-3">
-        {/* Sunrise */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            </div>
-            <span className="text-sm text-slate-600 dark:text-slate-400">Sunrise</span>
-          </div>
-          <span className="text-lg font-semibold text-slate-900 dark:text-white">
-            {formatTime(sunrise)}
+      <div className="relative flex flex-col items-center">
+        <svg width={arcX * 2} height={arcY + 10} viewBox={`0 0 ${arcX * 2} ${arcY + 10}`} className="block">
+          {/* Dashed half-circle arc */}
+          <path
+            d={`M${arcX - R},${arcY} A${R},${R} 0 0 1 ${arcX + R},${arcY}`}
+            fill="none"
+            stroke="#fbbf24"
+            strokeWidth={3}
+            strokeDasharray="6,6"
+          />
+          {/* Sun icon at calculated position */}
+          {sunriseMins !== null && sunsetMins !== null && nowMins !== null && (
+            <g>
+              <circle
+                cx={sunX}
+                cy={sunY}
+                r={5}
+                fill="#fde68a"
+                stroke="#fbbf24"
+                strokeWidth={2}
+                filter="url(#sunShadow)"
+              />
+              {/* Sun rays */}
+              {[...Array(8)].map((_, i) => {
+                const rayAngle = (Math.PI * i) / 4;
+                const x1 = sunX + Math.cos(rayAngle) * 12;
+                const y1 = sunY + Math.sin(rayAngle) * 12;
+                const x2 = sunX + Math.cos(rayAngle) * 16;
+                const y2 = sunY + Math.sin(rayAngle) * 16;
+                return (
+                  <line
+                    key={i}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="#fbbf24"
+                    strokeWidth={1}
+                  />
+                );
+              })}
+            </g>
+          )}
+        </svg>
+        {/* Sunrise and Sunset times at ends */}
+        <div className="flex justify-between w-full mt-2 px-1">
+          <span className="text-sm font-semibold text-slate-900 dark:text-white">
+            {sunrise || '--:--'}
           </span>
-        </div>
-
-        {/* Sunset */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            </div>
-            <span className="text-sm text-slate-600 dark:text-slate-400">Sunset</span>
-          </div>
-          <span className="text-lg font-semibold text-slate-900 dark:text-white">
-            {formatTime(sunset)}
+          <span className="text-sm font-semibold text-slate-900 dark:text-white">
+            {sunset || '--:--'}
           </span>
         </div>
       </div>

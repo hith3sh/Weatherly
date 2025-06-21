@@ -154,6 +154,7 @@ export default function Home() {
               currentWeather={weatherData.current}
               astro={weatherData.forecast.forecastday[0]?.astro}
               temperatureUnit={temperatureUnit}
+              location={weatherData.location}
             />
             
             {/* Weather Map below Today's Highlights */}

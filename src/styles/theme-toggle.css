@@ -54,22 +54,22 @@
 }
 
 /* Light theme styles */
-[data-theme='light'] .toggleTrack {
+/* [data-theme='light'] .toggleTrack {
   background: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme='light'] .toggleThumb {
   background: rgba(255, 255, 255, 0.9);
-}
+} */
 
 /* Dark theme styles */
-[data-theme='dark'] .toggleTrack {
+/* [data-theme='dark'] .toggleTrack {
   background: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme='dark'] .toggleThumb {
   background: rgba(255, 255, 255, 0.9);
-}
+} */
 
 /* Mobile responsiveness */
 @media (max-width: 640px) {
