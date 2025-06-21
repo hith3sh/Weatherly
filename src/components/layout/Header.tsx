@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { searchCities } from '../../lib/weatherApi';
+import { Switch } from '../ui/switch';
 
 interface HeaderProps {
   onSearch: (city: string) => void;
@@ -127,31 +128,19 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Controls */}
         <div className="w-full md:w-1/3 flex flex-row md:justify-end gap-2 order-1 md:order-none">
-          <div className="flex flex-row justify-end w-full md:w-auto gap-2">
+          <div className="flex flex-row justify-end w-full md:w-auto gap-1 items-center">
             {/* Temperature Unit Toggle */}
-            <div className="bg-slate-100 dark:bg-slate-700 rounded-full p-1 shadow-sm border border-slate-200 dark:border-slate-600">
-              <div className="flex">
-                <button
-                  onClick={() => onTemperatureUnitChange('C')}
-                  className={`px-2 py-1 rounded-full text-xs font-medium transition-all ${
-                    temperatureUnit === 'C'
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  °C
-                </button>
-                <button
-                  onClick={() => onTemperatureUnitChange('F')}
-                  className={`px-2 py-1 rounded-full text-xs font-medium transition-all ${
-                    temperatureUnit === 'F'
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  °F
-                </button>
-              </div>
+            <div className="flex items-center space-x-2">
+              <label htmlFor="temp-unit" className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              </label>
+              <Switch
+                id="temp-unit"
+                checked={temperatureUnit === 'F'}
+                onCheckedChange={(checked) => onTemperatureUnitChange(checked ? 'F' : 'C')}
+                aria-label="Temperature unit toggle"
+              />
+              <label htmlFor="temp-unit" className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              </label>
             </div>
             {/* Theme Toggle */}
             <button
