@@ -41,7 +41,6 @@ export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, l
 
   // Arc dimensions
   const R = 48; // radius
-  const C = Math.PI * R; // half circumference
   const arcY = 60;
   const arcX = 60;
   // Sun position along arc

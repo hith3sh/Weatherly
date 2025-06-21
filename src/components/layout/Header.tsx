@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
           const results = await searchCities(searchQuery);
           setSearchResults(results.slice(0, 5)); // Limit to 5 results
           setShowResults(true);
-        } catch (error) {
+        } catch {
           setSearchResults([]);
         } finally {
           setIsSearching(false);

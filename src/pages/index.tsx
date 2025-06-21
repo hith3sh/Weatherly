@@ -6,11 +6,19 @@ import { Header } from '../components/layout/Header';
 import { MainWeatherCard } from '../components/dashboard/MainWeatherCard';
 import { TodaysHighlight } from '../components/dashboard/TodaysHighlight';
 import { SevenDayForecast } from '../components/dashboard/SevenDayForecast';
-import { WeatherMap } from '../components/dashboard/WeatherMap';
+import dynamic from 'next/dynamic';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
 import { fetchWeatherData, WeatherData } from '../lib/weatherApi';
+
+const WeatherMap = dynamic(() =>
+  import('../components/dashboard/WeatherMap').then(mod => mod.WeatherMap),
+  {
+    ssr: false,
+    loading: () => <div className="h-96 w-full flex justify-center items-center bg-slate-100 dark:bg-slate-800 rounded-lg"><LoadingSpinner /></div>
+  }
+);
 
 // Helper function to determine weather type for animation effects
 const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
@@ -32,40 +40,34 @@ const getWeatherType = (conditionText: string): 'rain' | 'snow' | null => {
 };
 
 export default function Home() {
-  // Initialize state from localStorage or defaults
-  const [city, setCity] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedCity = localStorage.getItem('lastCity');
-      return savedCity || 'Colombo';
-    }
-    return 'Colombo';
-  });
-  
-  const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>(() => {
-    if (typeof window !== 'undefined') {
-      const savedUnit = localStorage.getItem('temperatureUnit') as 'C' | 'F';
-      return savedUnit || 'C';
-    }
-    return 'C';
-  });
-  
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
-      return savedTheme || 'light';
-    }
-    return 'light';
-  });
+  // Initialize state with default values
+  const [city, setCity] = useState('Colombo');
+  const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>('C');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [weatherType, setWeatherType] = useState<'rain' | 'snow' | null>(null);
 
+  // Load state from localStorage on initial client-side render
+  useEffect(() => {
+    const savedCity = localStorage.getItem('lastCity');
+    if (savedCity) {
+      setCity(savedCity);
+    }
+    const savedUnit = localStorage.getItem('temperatureUnit') as 'C' | 'F';
+    if (savedUnit) {
+      setTemperatureUnit(savedUnit);
+    }
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
   // Apply theme to document
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-    }
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   // Fetch weather data from API

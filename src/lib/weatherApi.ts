@@ -18,6 +18,8 @@ export interface WeatherData {
     name: string;
     country: string;
     localtime: string;
+    lat: number;
+    lon: number;
   };
   forecast: {
     forecastday: Array<{

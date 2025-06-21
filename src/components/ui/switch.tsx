@@ -12,7 +12,8 @@ function Switch({
       className={cn(
         "group peer inline-flex h-8 w-14 items-center rounded-full border border-slate-200 dark:border-slate-600 shadow-xs transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
-        "bg-slate-100 dark:bg-slate-700"
+        "bg-slate-100 dark:bg-slate-700",
+        className
     )}
       {...props}
     >
