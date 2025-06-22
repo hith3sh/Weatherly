@@ -5,7 +5,10 @@ interface FeelsLikeProps {
   temperatureUnit: 'C' | 'F';
 }
 
-export const FeelsLike: React.FC<FeelsLikeProps> = ({ feelsLike, temperatureUnit }) => {
+export const FeelsLike: React.FC<FeelsLikeProps> = ({
+  feelsLike,
+  temperatureUnit,
+}) => {
   const getFeelsLikeDescription = (temp: number, unit: 'C' | 'F') => {
     if (unit === 'F') {
       if (temp < 32) return 'Very Cold';
@@ -47,15 +50,34 @@ export const FeelsLike: React.FC<FeelsLikeProps> = ({ feelsLike, temperatureUnit
   };
 
   const color = getFeelsLikeColor(feelsLike, temperatureUnit);
-  const range = temperatureUnit === 'F' ? { min: 0, max: 100 } : { min: -10, max: 40 };
-  const percentage = Math.min(Math.max(((feelsLike - range.min) / (range.max - range.min)) * 100, 0), 100);
+  const range =
+    temperatureUnit === 'F' ? { min: 0, max: 100 } : { min: -10, max: 40 };
+  const percentage = Math.min(
+    Math.max(((feelsLike - range.min) / (range.max - range.min)) * 100, 0),
+    100
+  );
 
   return (
     <div className="bg-gradient-to-br from-red-50 to-orange-100 dark:from-red-900/20 dark:to-orange-800/20 rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9e3333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-thermometer-icon lucide-thermometer"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></svg>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Feels Like</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9e3333"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="lucide lucide-thermometer-icon lucide-thermometer"
+          >
+            <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
+          </svg>
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            Feels Like
+          </span>
         </div>
       </div>
 
@@ -82,4 +104,4 @@ export const FeelsLike: React.FC<FeelsLikeProps> = ({ feelsLike, temperatureUnit
       </div>
     </div>
   );
-}; 
+};

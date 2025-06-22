@@ -27,7 +27,11 @@ function getMinutesFromLocaltime(localtime?: string): number | null {
   return parseTime(timePart);
 }
 
-export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, localtime }) => {
+export const SunriseSunset: React.FC<SunriseSunsetProps> = ({
+  sunrise,
+  sunset,
+  localtime,
+}) => {
   // Parse times to minutes since midnight
   const sunriseMins = parseTime(sunrise);
   const sunsetMins = parseTime(sunset);
@@ -35,8 +39,16 @@ export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, l
 
   // Calculate sun position (0=start, 1=end)
   let sunPos = 0;
-  if (sunriseMins !== null && sunsetMins !== null && nowMins !== null && sunsetMins > sunriseMins) {
-    sunPos = Math.min(1, Math.max(0, (nowMins - sunriseMins) / (sunsetMins - sunriseMins)));
+  if (
+    sunriseMins !== null &&
+    sunsetMins !== null &&
+    nowMins !== null &&
+    sunsetMins > sunriseMins
+  ) {
+    sunPos = Math.min(
+      1,
+      Math.max(0, (nowMins - sunriseMins) / (sunsetMins - sunriseMins))
+    );
   }
 
   // Arc dimensions
@@ -51,11 +63,20 @@ export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, l
   return (
     <div className="bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 rounded-xl p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Sunrise</span>
-        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Sunset</span>
+        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+          Sunrise
+        </span>
+        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+          Sunset
+        </span>
       </div>
       <div className="relative flex flex-col items-center">
-        <svg width={arcX * 2} height={arcY + 10} viewBox={`0 0 ${arcX * 2} ${arcY + 10}`} className="block">
+        <svg
+          width={arcX * 2}
+          height={arcY + 10}
+          viewBox={`0 0 ${arcX * 2} ${arcY + 10}`}
+          className="block"
+        >
           {/* Dashed half-circle arc */}
           <path
             d={`M${arcX - R},${arcY} A${R},${R} 0 0 1 ${arcX + R},${arcY}`}
@@ -110,4 +131,4 @@ export const SunriseSunset: React.FC<SunriseSunsetProps> = ({ sunrise, sunset, l
       </div>
     </div>
   );
-}; 
+};

@@ -11,17 +11,23 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 const DefaultIcon = L.icon({
-    iconUrl: icon.src,
-    shadowUrl: iconShadow.src,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+  iconUrl: icon.src,
+  shadowUrl: iconShadow.src,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-function MapUpdater({ center, zoom }: { center: [number, number], zoom: number }) {
+function MapUpdater({
+  center,
+  zoom,
+}: {
+  center: [number, number];
+  zoom: number;
+}) {
   const map = useMap();
   React.useEffect(() => {
     map.setView(center, zoom);
@@ -40,7 +46,10 @@ const useIsDark = () => {
     checkDarkMode();
 
     const observer = new MutationObserver(checkDarkMode);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -62,13 +71,15 @@ export const WeatherMap: React.FC<WeatherMapProps> = ({ location }) => {
   const isDark = useIsDark();
 
   const lightTile = {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   };
 
   const darkTile = {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
   };
 
   const tileLayer = isDark ? darkTile : lightTile;
@@ -79,7 +90,12 @@ export const WeatherMap: React.FC<WeatherMapProps> = ({ location }) => {
         Weather Map
       </h2>
       <div className="h-96 rounded-lg overflow-hidden">
-        <MapContainer center={position} zoom={10} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+        <MapContainer
+          center={position}
+          zoom={10}
+          scrollWheelZoom={false}
+          style={{ height: '100%', width: '100%' }}
+        >
           <MapUpdater center={position} zoom={10} />
           <TileLayer
             key={tileLayer.url}
@@ -95,4 +111,4 @@ export const WeatherMap: React.FC<WeatherMapProps> = ({ location }) => {
       </div>
     </Card>
   );
-}; 
+};

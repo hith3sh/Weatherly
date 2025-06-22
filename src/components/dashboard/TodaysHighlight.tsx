@@ -41,7 +41,7 @@ export const TodaysHighlight: React.FC<TodaysHighlightProps> = ({
       <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-6">
         Today&apos;s Highlights
       </h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <WindStatus windSpeed={currentWeather.wind_mph} />
         <UvIndex uvIndex={currentWeather.uv} />
@@ -52,14 +52,15 @@ export const TodaysHighlight: React.FC<TodaysHighlightProps> = ({
         />
         <Humidity humidity={currentWeather.humidity} />
         <Visibility visibility={currentWeather.vis_km} />
-        <FeelsLike 
-          feelsLike={temperatureUnit === 'F' && currentWeather.feelslike_f !== undefined 
-            ? currentWeather.feelslike_f 
-            : currentWeather.feelslike_c
+        <FeelsLike
+          feelsLike={
+            temperatureUnit === 'F' && currentWeather.feelslike_f !== undefined
+              ? currentWeather.feelslike_f
+              : currentWeather.feelslike_c
           }
           temperatureUnit={temperatureUnit}
         />
       </div>
     </Card>
   );
-}; 
+};

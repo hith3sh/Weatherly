@@ -59,7 +59,7 @@ export class WeatherApiError extends Error {
 
 export const fetchWeatherData = async (city: string): Promise<WeatherData> => {
   const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-  
+
   if (!apiKey) {
     throw new WeatherApiError('Weather API key not configured');
   }
@@ -70,7 +70,7 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData> => {
     );
 
     if (!response.ok) {
-      const errorData = await response.json() as ApiErrorResponse;
+      const errorData = (await response.json()) as ApiErrorResponse;
       throw new WeatherApiError(
         errorData.error?.message || 'Failed to fetch weather data',
         errorData.error?.code
@@ -92,9 +92,11 @@ interface CitySearchResult {
   country: string;
 }
 
-export const searchCities = async (query: string): Promise<CitySearchResult[]> => {
+export const searchCities = async (
+  query: string
+): Promise<CitySearchResult[]> => {
   const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-  
+
   if (!apiKey) {
     throw new WeatherApiError('Weather API key not configured');
   }
@@ -105,15 +107,15 @@ export const searchCities = async (query: string): Promise<CitySearchResult[]> =
     );
 
     if (!response.ok) {
-      const errorData = await response.json() as ApiErrorResponse;
+      const errorData = (await response.json()) as ApiErrorResponse;
       throw new WeatherApiError(
         errorData.error?.message || 'Failed to search cities',
         errorData.error?.code
       );
     }
 
-    const data = await response.json() as CitySearchResult[];
-    return data.map((city) => ({
+    const data = (await response.json()) as CitySearchResult[];
+    return data.map(city => ({
       name: city.name,
       country: city.country,
     }));
@@ -123,4 +125,4 @@ export const searchCities = async (query: string): Promise<CitySearchResult[]> =
     }
     throw new WeatherApiError('Network error while searching cities');
   }
-}; 
+};

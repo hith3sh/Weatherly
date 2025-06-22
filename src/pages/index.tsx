@@ -12,11 +12,16 @@ import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
 import { fetchWeatherData, WeatherData } from '../lib/weatherApi';
 
-const WeatherMap = dynamic(() =>
-  import('../components/dashboard/WeatherMap').then(mod => mod.WeatherMap),
+const WeatherMap = dynamic(
+  () =>
+    import('../components/dashboard/WeatherMap').then(mod => mod.WeatherMap),
   {
     ssr: false,
-    loading: () => <div className="h-96 w-full flex justify-center items-center bg-slate-100 dark:bg-slate-800 rounded-lg"><LoadingSpinner /></div>
+    loading: () => (
+      <div className="h-96 w-full flex justify-center items-center bg-slate-100 dark:bg-slate-800 rounded-lg">
+        <LoadingSpinner />
+      </div>
+    ),
   }
 );
 
@@ -121,7 +126,7 @@ export default function Home() {
       {/* Weather animation effects */}
       {weatherType === 'rain' && <Rain />}
       {weatherType === 'snow' && <Snow />}
-      
+
       {/* Header with controls */}
       <Header
         onSearch={handleSearch}
@@ -142,10 +147,10 @@ export default function Home() {
               location={weatherData.location}
               temperatureUnit={temperatureUnit}
             />
-            
+
             {/* 7-Day Forecast below main weather card */}
-            <SevenDayForecast 
-              forecast={weatherData.forecast.forecastday} 
+            <SevenDayForecast
+              forecast={weatherData.forecast.forecastday}
               temperatureUnit={temperatureUnit}
             />
           </div>
@@ -158,7 +163,7 @@ export default function Home() {
               temperatureUnit={temperatureUnit}
               location={weatherData.location}
             />
-            
+
             {/* Weather Map below Today's Highlights */}
             <WeatherMap location={weatherData.location} />
           </div>

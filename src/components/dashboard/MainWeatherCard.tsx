@@ -92,4 +92,4 @@ export const MainWeatherCard: React.FC<MainWeatherCardProps> = ({
       </div>
     </Card>
   );
-}; 
+};
