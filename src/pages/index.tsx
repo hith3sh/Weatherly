@@ -7,7 +7,7 @@ import { MainWeatherCard } from '../components/dashboard/MainWeatherCard';
 import { TodaysHighlight } from '../components/dashboard/TodaysHighlight';
 import { SevenDayForecast } from '../components/dashboard/SevenDayForecast';
 import dynamic from 'next/dynamic';
-import { LoadingSpinner } from '../components/LoadingSpinner';
+import { LoadingSpinner } from '../utils/LoadingSpinner';
 import { Rain } from '../components/Rain';
 import { Snow } from '../components/Snow';
 import { fetchWeatherData, WeatherData } from '../lib/weatherApi';
